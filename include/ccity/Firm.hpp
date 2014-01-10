@@ -1,3 +1,4 @@
+#pragma once
 #include <eris/firm/PriceFirm.hpp>
 #include <eris/agent/CircularPosAgent.hpp>
 #include <eris/Position.hpp>
@@ -10,8 +11,8 @@ namespace ccity {
 /** Circular city firm.  Each period the firm contemplates increasing or decreasing price, and
  * moving left or right, taking any of those steps if beneficial, staying put otherwise.
  *
- * If the firm earns negative profits in a period, it leaves the market with a particular
- * probability (but only one firm may leave per period).
+ * If the firm earns negative profits below a certain threshold in a period, it leaves the market
+ * with a particular probability based on the magnitude of the loss.
  */
 class Firm : public eris::firm::PriceFirm, public eris::agent::CircularPosAgent,
         public virtual eris::interopt::OptApply {
@@ -24,13 +25,16 @@ class Firm : public eris::firm::PriceFirm, public eris::agent::CircularPosAgent,
         /** Calculates the effects of taking a step left, taking a step right, or staying put, and
          * picks the best option.  Then, having decided on a position, it calculates the profits
          * that would result from increasing price, from decreasing price, or from leaving price
-         * alone, and changes price accordingly.  Movement accelerates if successive steps are in
-         * the same direction, and decelerates if step direction fluctuates.
+         * alone, and changes price accordingly.  Movement (of both position and price) accelerates
+         * if successive steps are in the same direction, and decelerates if step directions
+         * fluctuates.
          */
         virtual void interOptimize();
 
-        /** Takes the move calculated in interOptimize().
+        /** Takes the move(s) calculated in interOptimize().
          */
         virtual void interApply();
+
+};
 
 }
