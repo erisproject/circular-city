@@ -1,5 +1,4 @@
 -std=c++11
--I/home/jagerman/research/eris/include
--Iinclude
+-Ieris/include
 -Wall
 -Werror

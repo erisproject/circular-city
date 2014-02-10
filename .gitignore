@@ -22,6 +22,6 @@ a.out
 .swo
 
 # Build files
-/build/
-/build[0-9]/
-/gcc-build/
+/*/build/
+/*/build[0-9]/
+/*/gcc-build/
