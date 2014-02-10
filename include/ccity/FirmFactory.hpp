@@ -1,4 +1,5 @@
 #pragma once
+#include <eris/Member.hpp>
 #include <eris/Bundle.hpp>
 #include "ccity/Firm.hpp"
 
@@ -17,6 +18,10 @@ class FirmFactory : public eris::Member, public virtual eris::interopt::OptApply
          * profit of at least `threshold`.  At most `max_entrants` (defaults to 1) are created per
          * period, and at most `max_firms` firms may exist at once (defaults to 0, which means
          * unlimited).
+         *
+         * A value of 0 for `max_entrants` or `max_firms` means that no entrant limits will be
+         * applied at all: in such a case, the maximum number of entrants is always the current
+         * number of firms (because there are exactly `n` entry positions in a ring of `n` firms).
          */
         FirmFactory(Bundle threshold, unsigned int max_entrants = 1, unsigned int max_firms = 0);
 
@@ -34,7 +39,7 @@ class FirmFactory : public eris::Member, public virtual eris::interopt::OptApply
     private:
         Bundle threshold_;
         unsigned int max_entrants_, max_firms_;
-        
+        const double bound_left_ = 0.0, bound_right_ = 1.0;
 };
 
 }
