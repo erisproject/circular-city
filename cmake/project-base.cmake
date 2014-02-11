@@ -7,7 +7,9 @@
 # the project's ${myproj} directory (e.g. circular-city/ccity/); any cpp files
 # inside the project top-level directory (e.g. circular-city/) will be compiled
 # to executables that link aginst liberis and the project's compiled object
-# files.
+# files.  If ${myproj} doesn't exist or contains no .cpp files (including in
+# subdirectories), it is assumed that no objects are to be compiled, only
+# executables.
 #
 # Object headers should then be included via '#include "ccity/whatever.hpp"'.
 #
@@ -70,12 +72,16 @@ endif()
 
 add_definitions(-std=c++11 -Wall -Werror)
 
-add_library(${myproj} ${proj_object_src})
+if(proj_object_src)
+    add_library(${myproj} ${proj_object_src})
+endif()
 
 foreach(proj_src ${proj_executables})
     get_filename_component(exec "${proj_src}" NAME_WE)
     add_executable("${exec}" "${proj_src}")
     target_link_libraries("${exec}" ${ERIS_LIB})
-    target_link_libraries("${exec}" ${myproj})
+    if(proj_object_src)
+        target_link_libraries("${exec}" ${myproj})
+    endif()
 endforeach()
 
